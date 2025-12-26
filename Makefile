@@ -1,31 +1,39 @@
-# Makefile for Flutter Web + Firebase Deploy
+# Makefile for Flutter Web + Vercel Deploy
 
 # Variables
 SCRIPT_DIR = scripts
-# Get current date/time dynamically
+# Get current date/time dynamically for the commit message
 NOW := $(shell date '+%Y-%m-%d %H:%M:%S')
 
-.PHONY: icons build deploy run save
+.PHONY: icons build vercel deploy-firebase save ship
 
-# Generate icons from favicon.svg before building
+# 1. Generate icons (System check)
 icons:
 	@sh $(SCRIPT_DIR)/icons.sh
 
-# Build the web release (depends on icons)
+# 2. Build the web release with your specific flags
 build: icons
-	flutter build web --release
+	flutter build web --release --no-tree-shake-icons
+	
+# 3. Deploy to Vercel (Production)
+# We cd into build/web because that is where the static files live
+vercel:
+	cd build/web && vercel --prod
 
-# Deploy to Firebase
-deploy:
+# Optional: Keep Firebase deploy just in case you go back
+deploy-firebase:
 	firebase deploy
 
-# Full sequence: Icons -> Build -> Deploy
-run: build deploy
+run: build vercel
 	@echo "Build and deploy complete!"
 
-# NEW: Git Save Command
+# 4. Git Save (Add & Commit with Timestamp)
 save:
 	git add .
-	git commit -m "Added changes on $(NOW) from Harare, Zimbabwe"
-	@echo "✅ Saved with timestamp: $(NOW)"
-	https://github.com/gabrielle247/helpx
+	git commit -m "Updates on $(NOW) from Harare" || echo "Nothing to commit"
+
+# --- THE MASTER COMMAND ---
+# Runs: Build -> Vercel Deploy -> Git Save -> Git Push
+ship: build vercel save
+	git push origin main
+	@echo "🚀 Shipped to Vercel and GitHub successfully!"

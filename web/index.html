@@ -46,6 +46,15 @@
   </noscript>
 
   <script src="flutter_bootstrap.js" async></script>
+  
+  <script>
+  // Fix for older Stripe packages
+  window.platformViewRegistry = window.platformViewRegistry || {
+    registerViewFactory: function(viewId, cb) {
+      console.log('Registering view factory for ' + viewId);
+    }
+  };
+</script>
 </body>
 
 </html>

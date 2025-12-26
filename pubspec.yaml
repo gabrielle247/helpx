@@ -26,8 +26,8 @@ dependencies:
 
   # --- PAYMENTS ---
   # Credit Cards (Stripe is best for Web)
-  flutter_stripe: ^10.1.1
-  flutter_stripe_web: ^5.1.0 # Required for web support
+  #flutter_stripe: ^10.1.1
+  #flutter_stripe_web: ^5.1.0 # Required for web support
 
   # PayPal
   flutter_paypal: ^0.2.1
