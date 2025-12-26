@@ -4,57 +4,59 @@
 <head>
   <base href="$FLUTTER_BASE_HREF">
 
-  <script src="https://js.stripe.com/v3/"></script>
-  <meta name="google-site-verification" content="1CLeazV20K5oGDre0neHw0RY8hgchUPP70iWhrIPr1k" />
-  
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="google-site-verification" content="1CLeazV20K5oGDre0neHw0RY8hgchUPP70iWhrIPr1k" />
 
   <title>Help X — Request and Offer Help Online</title>
-  <meta name="description"
-    content="Help X is a secure web application that connects people who need help with those who can provide it." />
+  <meta name="description" content="Help X is a secure web application by Greyway.Co that connects people who need help with those who can provide it." />
   <meta name="robots" content="index, follow" />
 
   <meta name="application-name" content="Help X">
-  <meta name="theme-color" content="#121212">
+  <meta name="msapplication-TileColor" content="#121212">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="manifest" href="manifest.json">
+
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <meta http-equiv="Content-Security-Policy" content="
+          default-src 'self';
+          script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.gstatic.com;
+          style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+          img-src 'self' data: blob: https://*.gstatic.com;
+          font-src 'self' data: https://fonts.gstatic.com;
+          connect-src *;
+          frame-src https://js.stripe.com;
+        " />
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Help X">
-
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-
-  <link rel="manifest" href="manifest.json">
-
-  <meta http-equiv="Content-Security-Policy" content="
-          default-src 'self';
-          script-src 'self' 'unsafe-inline';
-          style-src 'self' 'unsafe-inline';
-          img-src 'self' data:;
-          font-src 'self' data:;
-          connect-src *;
-        " />
-
 </head>
 
 <body>
   <noscript>
-    <strong>Help X requires JavaScript to run.</strong>
+    <div style="color: white; background: #121212; height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif;">
+      <strong>Help X requires JavaScript to run. Please enable it in your browser.</strong>
+    </div>
   </noscript>
 
   <script src="flutter_bootstrap.js" async></script>
   
   <script>
-  // Fix for older Stripe packages
-  window.platformViewRegistry = window.platformViewRegistry || {
-    registerViewFactory: function(viewId, cb) {
-      console.log('Registering view factory for ' + viewId);
-    }
-  };
-</script>
+    // Compatibility Shim for Stripe Web
+    // This prevents 'platformViewRegistry' errors in older Flutter SDKs
+    window.addEventListener('load', function(ev) {
+      window.platformViewRegistry = window.platformViewRegistry || {
+        registerViewFactory: function(viewId, cb) {
+          console.log('Shim: Registering view factory for ' + viewId);
+        }
+      };
+    });
+  </script>
 </body>
 
 </html>
