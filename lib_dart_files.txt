@@ -1,0 +1,1909 @@
+export 'app_constants.dart';
+export 'color_tokens.dart';
+export 'layout_constants.dart';
+export 'motion_constants.dart';
+export 'text_tokens.dart';import 'package:flutter/material.dart';
+
+// Color Tokens
+// Purpose: Semantic color definitions. We don't use "Blue", we use "Accent".
+
+class AppColors {
+  // Backgrounds
+  static const Color bgPrimary = Color(0xFF0A0A0A);   // Deepest Black
+  static const Color bgSurface = Color(0xFF161616);   // Card Surface
+
+  // Accents (The Greyway Blue)
+  static const Color accent = Color(0xFF137FEC);
+  static const Color accentHover = Color(0xFF0D5CB0);
+  static const Color accentMuted = Color(0x33137FEC); // 20% Opacity
+
+  // Text
+  static const Color textPrimary = Colors.white;
+  static Color textMuted = Colors.white.withAlpha(150); // ~60% Opacity
+  static Color textSubtle = Colors.white.withAlpha(80); // ~30% Opacity
+
+  // Borders & Dividers
+  static Color borderSubtle = Colors.white.withAlpha(20);
+  static Color borderAccent = accent.withAlpha(100);
+}import 'package:flutter/material.dart';
+
+// Motion Constants
+// Purpose: Consistent animation timing across the app.
+
+class Motion {
+  static const Duration fast = Duration(milliseconds: 150);
+  static const Duration normal = Duration(milliseconds: 250);
+  static const Duration slow = Duration(milliseconds: 400);
+
+  static const Curve standard = Curves.easeOutCubic;
+}import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'color_tokens.dart';
+
+// Typography Scale
+// Purpose: A strict type hierarchy. No random font sizes allowed.
+
+class AppText {
+  // Hero / Display
+  static TextStyle h1(bool isMobile) => GoogleFonts.inter(
+    fontSize: isMobile ? 40 : 72,
+    fontWeight: FontWeight.w900,
+    height: 1.1,
+    letterSpacing: -1.5,
+    color: AppColors.textPrimary,
+  );
+
+  // Section Headers
+  static TextStyle h2(bool isMobile) => GoogleFonts.inter(
+    fontSize: isMobile ? 28 : 36,
+    fontWeight: FontWeight.w900,
+    letterSpacing: -0.5,
+    color: AppColors.textPrimary,
+  );
+
+  // Card Titles
+  static const TextStyle h3 = TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
+
+  // Body Text
+  static TextStyle body = TextStyle(
+    fontSize: 16,
+    height: 1.6,
+    color: AppColors.textMuted,
+  );
+
+  // Labels / Overlines
+  static TextStyle label = const TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w900,
+    letterSpacing: 2.0,
+    color: AppColors.accent,
+  );
+  
+  // Button Text
+  static const TextStyle button = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w800,
+    letterSpacing: 0.5,
+  );
+}
+// app_constants.dart
+// Identity & Configuration
+// Purpose: Single source of truth for app identity and external links.
+
+const String appId = 'help-x-web';
+const String whatsappNumber = '263785930886';
+
+const String appName = 'Help X';
+const String appEdition = 'Batch One Edition';
+const String appVersion = '1.0.0';
+const String appBuildNumber = '1';
+const String supportEmail = 'gabwixgamesite2024@gmail.com';
+
+// External Links
+const String helpXWebsite = 'https://www.helpx.tech';
+const String helpXFacebookPage = 'https://www.facebook.com/helpxtech';
+const String helpXInstagramPage = 'https://www.instagram.com/helpxtech';
+const String helpXTwitterPage = 'https://www.twitter.com/helpxtech';
+const String helpXLinkedinPage = 'https://www.linkedin.com/company/helpxtech';
+const String helpXMediumPage = 'https://medium.com/helpxtech';
+const String helpXYouTubeChannel = 'https://www.youtube.com/@helpxtech';
+const String helpXTikTokPage = 'https://www.tiktok.com/@helpxtech';
+const String helpXGithubPage = 'https://github.com/helpxtech';
+const String helpXEmailSupport = 'mailto:gabwixgamesite2024@gmail.com';
+const String helpXHelpCenter = 'https://help.helpx.tech';
+const String helpXHelpCenterApi = 'https://api.helpx.tech/v1';
+const String helpXHelpCenterAdmin = 'https://admin.helpx.tech';
+const String helpXHelpCenterAdminApi = 'https://api.helpx.tech/admin/v1';
+const String helpXHelpCenterAdminPortal = 'https://portal.helpx.tech/admin';// Layout & Spacing Contract
+// Purpose: Enforce vertical rhythm and responsive breakpoints. No more magic numbers.
+
+class Layout {
+  // Breakpoints
+  static const double mobileLimit = 900;
+  static const double tabletLimit = 1200;
+
+  // Max Widths for Content
+  static const double contentMaxWidth = 1200;
+  static const double narrowMaxWidth = 700;
+
+  // Vertical Rhythm (The heartbeat of the layout)
+  static const double sectionGap = 120;      // Large gap between major sections
+  static const double sectionGapSmall = 80;  // Medium gap for tighter flows
+  static const double itemGap = 30;          // Gap between grid items
+  static const double elementGap = 16;       // Gap between text and button
+
+  // Page Padding
+  static const double pagePaddingMobile = 20;
+  static const double pagePaddingDesktop = 60;
+}import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'firebase_options.dart';
+import 'pages/landing_page.dart';
+
+void main() async {
+  // Ensure Flutter is initialized for async calls
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // FIX: Firebase MUST be initialized before use
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    debugPrint("Firebase Setup Error: $e");
+  }
+  
+  runApp(const HelpXApp());
+}
+
+class HelpXApp extends StatelessWidget {
+  const HelpXApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Help X | Batch Tech',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF0A0A0A),
+        primaryColor: const Color(0xFF137FEC),
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF137FEC),
+          secondary: Color(0xFF137FEC),
+          surface: Color(0xFF161616),
+        ),
+        textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).apply(
+          bodyColor: Colors.white,
+          displayColor: Colors.white,
+        ),
+        useMaterial3: true,
+      ),
+      home: const LandingPage(),
+    );
+  }
+}// File generated by FlutterFire CLI.
+// ignore_for_file: type=lint
+import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+
+/// Default [FirebaseOptions] for use with your Firebase apps.
+///
+/// Example:
+/// ```dart
+/// import 'firebase_options.dart';
+/// // ...
+/// await Firebase.initializeApp(
+///   options: DefaultFirebaseOptions.currentPlatform,
+/// );
+/// ```
+class DefaultFirebaseOptions {
+  static FirebaseOptions get currentPlatform {
+    if (kIsWeb) {
+      return web;
+    }
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.iOS:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.macOS:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.windows:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.linux:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for linux - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      default:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions are not supported for this platform.',
+        );
+    }
+  }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCeS_v7oZ86-8dTHAUTMDvESJcNxLMOk2Y',
+    appId: '1:1039176337132:web:dffc137cfb1eb073d987c9',
+    messagingSenderId: '1039176337132',
+    projectId: 'theinformativeads',
+    authDomain: 'theinformativeads.firebaseapp.com',
+    databaseURL: 'https://theinformativeads-default-rtdb.firebaseio.com',
+    storageBucket: 'theinformativeads.firebasestorage.app',
+    measurementId: 'G-DH6V6B0R01',
+  );
+}
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+// Import the Design Contract
+import '../core/app_constants.dart';
+import '../core/layout_constants.dart';
+import '../core/color_tokens.dart';
+import '../core/text_tokens.dart';
+
+import 'library_page.dart';
+import 'services_page.dart';
+import 'premium_hub.dart';
+
+class LandingPage extends StatefulWidget {
+  const LandingPage({super.key});
+
+  @override
+  State<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
+  final ScrollController _scrollController = ScrollController();
+  
+  User? _user;
+  bool _isPremium = false;
+  // ignore: unused_field
+  bool _isMentor = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initAuthAndSync();
+  }
+
+  // Auth & Sync Logic (Kept simple and effective)
+  Future<void> _initAuthAndSync() async {
+    try {
+      final auth = FirebaseAuth.instance;
+      if (auth.currentUser == null) {
+        await auth.signInAnonymously();
+      }
+      _user = auth.currentUser;
+      if (_user != null) {
+        _syncUserStatus();
+      }
+    } catch (e) {
+      debugPrint("Auth Init Error: $e");
+    }
+  }
+
+  void _syncUserStatus() {
+    if (_user == null) return;
+    FirebaseFirestore.instance
+        .collection('artifacts')
+        .doc(appId)
+        .collection('users')
+        .doc(_user!.uid)
+        .collection('profile')
+        .doc('status')
+        .snapshots()
+        .listen((doc) {
+      if (doc.exists && mounted) {
+        setState(() {
+          _isPremium = doc.data()?['isPremium'] ?? false;
+          _isMentor = doc.data()?['isMentor'] ?? false;
+        });
+      }
+    }, onError: (e) => debugPrint("Firestore Sync Error: $e"));
+  }
+
+  void _navigateTo(BuildContext context, Widget page) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
+  // ignore: unused_element
+  void _contactSupport() async {
+    final Uri url = Uri.parse("https://wa.me/$whatsappNumber");
+    if (!await launchUrl(url)) debugPrint("Could not launch WhatsApp");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Responsive calculation happens once
+    final double sw = MediaQuery.of(context).size.width;
+    final bool isMobile = sw < Layout.mobileLimit;
+
+    return Scaffold(
+      backgroundColor: AppColors.bgPrimary,
+      body: Stack(
+        children: [
+          // Background Mesh
+          Positioned.fill(child: _buildMeshBackground()),
+
+          // Main Scroll View
+          CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              _buildAppBar(context, isMobile),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? Layout.pagePaddingMobile : Layout.pagePaddingDesktop
+                  ),
+                  child: Column(
+                    children: [
+                      // Section 1: Hero
+                      SizedBox(height: isMobile ? Layout.sectionGapSmall : Layout.sectionGap),
+                      _buildHero(isMobile),
+                      
+                      // Section 2: Trust Signals (Outcome focused)
+                      const SizedBox(height: Layout.sectionGapSmall),
+                      _buildTrustBar(),
+                      
+                      // Section 3: Rescue Services (Renamed per your strategy)
+                      const SizedBox(height: Layout.sectionGap),
+                      _buildServicesSection(context, isMobile),
+                      
+                      // Section 4: Rescue Kits (Library)
+                      const SizedBox(height: Layout.sectionGap),
+                      _buildRescueKitsSection(context, isMobile),
+                      
+                      // Section 5: Certainty CTA (Premium)
+                      const SizedBox(height: Layout.sectionGap),
+                      _buildPremiumCTA(context, isMobile),
+                      
+                      // Footer
+                      const SizedBox(height: Layout.sectionGap),
+                      _buildFooter(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMeshBackground() {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: RadialGradient(
+          center: Alignment.topCenter,
+          radius: 1.5,
+          colors: [
+            Color(0x1A137FEC), // 10% Opacity Accent
+            AppColors.bgPrimary,
+          ],
+        ),
+      ),
+      child: Opacity(
+        opacity: 0.03,
+        child: GridPaper(
+          color: Colors.white,
+          divisions: 1,
+          subdivisions: 1,
+          interval: 40,
+          child: Container(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context, bool isMobile) {
+    return SliverAppBar(
+      floating: true,
+      pinned: true,
+      backgroundColor: AppColors.bgPrimary.withAlpha(240), // 94% Opacity
+      elevation: 0,
+      title: InkWell(
+        onTap: () => _navigateTo(context, const PremiumHub()),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: _isPremium ? AppColors.accent : AppColors.bgSurface,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: _isPremium ? Colors.white.withAlpha(50) : AppColors.borderSubtle
+                ),
+              ),
+              child: Icon(
+                _isPremium ? Icons.stars_rounded : Icons.local_library,
+                color: AppColors.textPrimary,
+                size: 18,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(appName.toUpperCase(), style: AppText.h3.copyWith(letterSpacing: 2)),
+          ],
+        ),
+      ),
+      actions: isMobile
+          ? [IconButton(onPressed: () {}, icon: const Icon(Icons.menu))]
+          : [
+              _navAction("Protocols", () => _navigateTo(context, const ServicesPage())),
+              _navAction("Library", () => _navigateTo(context, const LibraryPage())),
+              const SizedBox(width: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: ElevatedButton(
+                  onPressed: () => _navigateTo(context, const PremiumHub()),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _isPremium ? AppColors.bgSurface : AppColors.accent,
+                    foregroundColor: AppColors.textPrimary,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                  ),
+                  child: Text(
+                    _isPremium ? "OPERATOR HUB" : "UNLOCK ACCESS",
+                    style: AppText.button,
+                  ),
+                ),
+              ),
+            ],
+    );
+  }
+
+  Widget _navAction(String label, VoidCallback onTap) {
+    return TextButton(
+      onPressed: onTap,
+      child: Text(label, style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w600)),
+    );
+  }
+
+  Widget _buildHero(bool isMobile) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: _isPremium ? AppColors.accent.withAlpha(30) : AppColors.bgSurface,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: _isPremium ? AppColors.accent.withAlpha(100) : AppColors.borderSubtle
+            ),
+          ),
+          child: Text(
+            _isPremium ? "PREMIUM ACCESS ACTIVE" : appEdition.toUpperCase(),
+            style: AppText.label.copyWith(
+              color: _isPremium ? AppColors.accent : AppColors.textMuted
+            ),
+          ),
+        ),
+        const SizedBox(height: Layout.itemGap),
+        Text(
+          "Pass Fast.\nWith Certainty.",
+          textAlign: TextAlign.center,
+          style: AppText.h1(isMobile),
+        ),
+        const SizedBox(height: Layout.itemGap),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: Layout.narrowMaxWidth),
+          child: Text(
+            "The outcome-driven rescue system for Batch Tech students. Get exact fixes, pre-checked blueprints, and priority rescue operators.",
+            textAlign: TextAlign.center,
+            style: AppText.body,
+          ),
+        ),
+        const SizedBox(height: 50),
+        _buildHeroSearch(isMobile),
+      ],
+    );
+  }
+
+  Widget _buildHeroSearch(bool isMobile) {
+    return Container(
+      width: isMobile ? double.infinity : 650,
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: AppColors.bgSurface,
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(color: AppColors.borderSubtle),
+        boxShadow: [BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 30, offset: const Offset(0, 10))],
+      ),
+      child: Row(
+        children: [
+          const SizedBox(width: 20),
+          Icon(Icons.search, color: AppColors.textMuted),
+          const SizedBox(width: 12),
+          Expanded(
+            child: TextField(
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: "Search rescue kits (e.g., '121b fix')...",
+                hintStyle: TextStyle(color: AppColors.textSubtle),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => _navigateTo(context, const LibraryPage()),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.accent,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+            ),
+            child: const Text("FIND FIX", style: AppText.button),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrustBar() {
+    return Wrap(
+      spacing: 40,
+      runSpacing: 20,
+      alignment: WrapAlignment.center,
+      children: [
+        _trustItem(Icons.verified, "Outcome Verified"),
+        _trustItem(Icons.bolt, "Instant Execution"),
+        _trustItem(Icons.lock, "Secure Platform"),
+      ],
+    );
+  }
+
+  Widget _trustItem(IconData icon, String label) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: AppColors.accent, size: 16),
+        const SizedBox(width: 10),
+        Text(
+          label,
+          style: TextStyle(
+            color: AppColors.textMuted,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildServicesSection(BuildContext context, bool isMobile) {
+    return Column(
+      children: [
+        Text("RESCUE PROTOCOLS", style: AppText.label),
+        const SizedBox(height: 16),
+        Text("Stop Struggling. Start Finishing.", style: AppText.h2(isMobile), textAlign: TextAlign.center),
+        const SizedBox(height: 60),
+        Wrap(
+          spacing: Layout.itemGap,
+          runSpacing: Layout.itemGap,
+          alignment: WrapAlignment.center,
+          children: [
+            _serviceCard(context, "Technical Rescue", "Environment broken? Tools fighting you? We log in and fix it so you can submit.", Icons.terminal),
+            _serviceCard(context, "Concept Unblock", "Stuck on logic? We explain the exact concept blocking you until it clicks.", Icons.lightbulb_outline),
+            _serviceCard(context, "Course Stabilization", "Falling behind? We build a recovery plan to get you passing by Friday.", Icons.health_and_safety),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _serviceCard(BuildContext context, String title, String desc, IconData icon) {
+    return Container(
+      width: 350,
+      padding: const EdgeInsets.all(40),
+      decoration: BoxDecoration(
+        color: AppColors.bgSurface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.borderSubtle),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: AppColors.accent, size: 40),
+          const SizedBox(height: 24),
+          Text(title, style: AppText.h3),
+          const SizedBox(height: 16),
+          Text(desc, style: AppText.body),
+          const SizedBox(height: 32),
+          TextButton(
+            onPressed: () => _navigateTo(context, const ServicesPage()),
+            style: TextButton.styleFrom(padding: EdgeInsets.zero),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text("INITIATE PROTOCOL", style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                const SizedBox(width: 8),
+                const Icon(Icons.arrow_forward, size: 16, color: AppColors.accent),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRescueKitsSection(BuildContext context, bool isMobile) {
+    return Column(
+      children: [
+        Text("RESCUE KITS", style: AppText.label),
+        const SizedBox(height: 16),
+        Text("Submission-Ready Blueprints", style: AppText.h2(isMobile), textAlign: TextAlign.center),
+        const SizedBox(height: 60),
+        Wrap(
+          spacing: Layout.itemGap,
+          runSpacing: Layout.itemGap,
+          alignment: WrapAlignment.center,
+          children: [
+            _libraryCard(context, "Python Masterclass", "assets/python.png", "PASS KIT", isPremium: true),
+            _libraryCard(context, "Calculus II Rescue", "assets/calculus.jpg", "PASS KIT", isPremium: true),
+            _libraryCard(context, "Data Types Map", "assets/data_types.jpg", "FREE", isPremium: false), // Lead magnet
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _libraryCard(BuildContext context, String title, String asset, String badge, {bool isPremium = false}) {
+    bool isUnlocked = _isPremium || !isPremium;
+
+    return InkWell(
+      onTap: () => _navigateTo(context, const LibraryPage()),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        width: 300,
+        decoration: BoxDecoration(
+          color: AppColors.bgSurface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: isUnlocked ? AppColors.borderSubtle : AppColors.borderSubtle),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              child: Stack(
+                children: [
+                  Image.asset(
+                    asset,
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      height: 180,
+                      color: Colors.white.withAlpha(10),
+                      child: const Center(child: Icon(Icons.broken_image, color: Colors.white24)),
+                    ),
+                  ),
+                  if (!isUnlocked)
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withAlpha(180),
+                        child: const Center(child: Icon(Icons.lock, color: Colors.white54, size: 32)),
+                      ),
+                    ),
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isPremium ? AppColors.accent : Colors.green,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(badge, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white)),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: AppText.h3.copyWith(fontSize: 18)),
+                  const SizedBox(height: 8),
+                  Text("Complete blueprint to pass assignment 3.", style: AppText.body.copyWith(fontSize: 14)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPremiumCTA(BuildContext context, bool isMobile) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(60),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.accent, AppColors.accent.withAlpha(200)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [BoxShadow(color: AppColors.accent.withAlpha(80), blurRadius: 60, offset: const Offset(0, 20))],
+      ),
+      child: Column(
+        children: [
+          Text(
+            _isPremium ? "Operator Access Granted" : "Stop Guessing.",
+            style: AppText.h2(isMobile).copyWith(fontSize: 40),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            _isPremium 
+              ? "Welcome to the elite circle. Your tools are ready."
+              : "Get the exact commands, checklists, and blueprints to pass with certainty.",
+            textAlign: TextAlign.center,
+            style: AppText.body.copyWith(color: Colors.white.withAlpha(220), fontSize: 18),
+          ),
+          const SizedBox(height: 40),
+          ElevatedButton(
+            onPressed: () => _navigateTo(context, const PremiumHub()),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: AppColors.accent,
+              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+            ),
+            child: Text(
+              _isPremium ? "ENTER HUB" : "UNLOCK CERTAINTY",
+              style: AppText.button.copyWith(fontSize: 16),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFooter() {
+    return Column(
+      children: [
+        Icon(Icons.local_library, color: AppColors.textSubtle, size: 32),
+        const SizedBox(height: 24),
+        Text("A Greyway.Co Production | Batch Tech 2025", style: AppText.label.copyWith(color: AppColors.textSubtle)),
+        const SizedBox(height: 12),
+        Text("© 2023 Help X. All rights reserved.", style: TextStyle(color: AppColors.textSubtle, fontSize: 12)),
+      ],
+    );
+  }
+}import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'bookings_page.dart';
+
+class ServicesPage extends StatelessWidget {
+  const ServicesPage({super.key});
+
+  void _navigateToBooking(BuildContext context, String serviceName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const BookingsPage()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double sw = MediaQuery.of(context).size.width;
+    bool isMobile = sw < 900;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0A),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(
+          "RESCUE PROTOCOLS",
+          style: GoogleFonts.inter(fontWeight: FontWeight.w900, letterSpacing: 2),
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildRow(
+              context,
+              isMobile,
+              "Technical Rescue Session",
+              "Your setup is broken, your tools are fighting you, and deadlines are close. We diagnose and fix environment issues, configuration errors, and tooling failures so you can run, build, and submit without friction — today.",
+              "Fix My Setup",
+              Icons.build_circle,
+              true,
+            ),
+            _buildRow(
+              context,
+              isMobile,
+              "Concept Clarity Session",
+              "When assignments fail because the idea never clicked. We break down the exact concept blocking you — algorithms, data structures, or logic — until you can explain it and apply it confidently.",
+              "Unblock This Concept",
+              Icons.lightbulb_circle,
+              false,
+            ),
+            _buildRow(
+              context,
+              isMobile,
+              "Course Survival Path",
+              "For students falling behind or approaching assessment deadlines. Structured, course-specific support for WDD 130, CSE 121b, and related tracks, focused on passing — not endless tutoring.",
+              "Stabilize My Course",
+              Icons.health_and_safety,
+              true,
+            ),
+            const SizedBox(height: 100),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRow(
+    BuildContext context,
+    bool isMobile,
+    String title,
+    String desc,
+    String ctaText,
+    IconData icon,
+    bool imgLeft,
+  ) {
+    Widget imageSection = Container(
+      width: isMobile ? double.infinity : 400,
+      height: 300,
+      decoration: BoxDecoration(
+        color: Colors.white.withAlpha(10),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFF137FEC).withAlpha(50)),
+      ),
+      child: Center(
+        child: Icon(icon, size: 80, color: const Color(0xFF137FEC)),
+      ),
+    );
+
+    Widget textSection = Column(
+      crossAxisAlignment:
+          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.w900),
+          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+        ),
+        const SizedBox(height: 15),
+        Text(
+          desc,
+          style: TextStyle(color: Colors.white.withAlpha(200), fontSize: 16, height: 1.5),
+          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+        ),
+        const SizedBox(height: 10),
+        // Trust signal
+        Row(
+          mainAxisAlignment: isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
+          children: [
+            const Icon(Icons.verified_user, size: 14, color: Color(0xFF137FEC)),
+            const SizedBox(width: 6),
+            Text(
+              "Used by students under active deadlines",
+              style: TextStyle(
+                color: const Color(0xFF137FEC).withAlpha(200),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 30),
+        ElevatedButton.icon(
+          onPressed: () => _navigateToBooking(context, title),
+          icon: const Icon(Icons.arrow_forward, size: 18),
+          label: Text(
+            ctaText.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.0,
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF137FEC),
+            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 20),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 10,
+            shadowColor: const Color(0xFF137FEC).withAlpha(100),
+          ),
+        ),
+      ],
+    );
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 20 : 100,
+        vertical: 80,
+      ),
+      child: isMobile
+          ? Column(
+              children: [
+                imageSection,
+                const SizedBox(height: 40),
+                textSection,
+              ],
+            )
+          : Row(
+              children: [
+                if (imgLeft) ...[
+                  imageSection,
+                  const SizedBox(width: 80),
+                ],
+                Expanded(child: textSection),
+                if (!imgLeft) ...[
+                  const SizedBox(width: 80),
+                  imageSection,
+                ],
+              ],
+            ),
+    );
+  }
+}import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../core/app_constants.dart' as app_constants;
+import 'mentor_portal.dart';
+
+class PremiumHub extends StatefulWidget {
+  const PremiumHub({super.key});
+
+  @override
+  State<PremiumHub> createState() => _PremiumHubState();
+}
+
+class _PremiumHubState extends State<PremiumHub> {
+  User? _user;
+  bool _isPremium = false;
+  bool _isMentor = false;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initAuthAndSync();
+  }
+
+  Future<void> _initAuthAndSync() async {
+    try {
+      if (FirebaseAuth.instance.currentUser == null) {
+        await FirebaseAuth.instance.signInAnonymously();
+      }
+      _user = FirebaseAuth.instance.currentUser;
+      if (_user != null) {
+        _syncUserStatus();
+      }
+    } catch (e) {
+      debugPrint("Auth Error: $e");
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  void _syncUserStatus() {
+    if (_user == null) return;
+
+    FirebaseFirestore.instance
+        .collection('artifacts')
+        .doc(app_constants.appId)
+        .collection('users')
+        .doc(_user!.uid)
+        .collection('profile')
+        .doc('status')
+        .snapshots()
+        .listen((doc) {
+      if (doc.exists && mounted) {
+        setState(() {
+          _isPremium = doc.data()?['isPremium'] ?? false;
+          _isMentor = doc.data()?['isMentor'] ?? false;
+          _isLoading = false;
+        });
+      } else {
+        if (mounted) setState(() => _isLoading = false);
+      }
+    }, onError: (e) => debugPrint("Firestore Error: $e"));
+  }
+
+  Future<void> _applyForMentor() async {
+    if (_user == null) return;
+    
+    await FirebaseFirestore.instance
+        .collection('artifacts')
+        .doc(appId)
+        .collection('public')
+        .doc('data')
+        .collection('mentorApplications')
+        .doc(_user!.uid)
+        .set({
+      'userId': _user!.uid,
+      'appliedAt': FieldValue.serverTimestamp(),
+      'status': 'pending',
+    });
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Application submitted to Batch Tech HQ.")),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator(color: Color(0xFF137FEC))));
+    }
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0A),
+      body: Stack(
+        children: [
+          _buildBackground(),
+          SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                _buildHeader(),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildProfileCard(),
+                        const SizedBox(height: 40),
+                        _sectionTitle("YOUR GUARANTEES"), // Changed from "ELITE ACCESS"
+                        const SizedBox(height: 20),
+                        _buildOutcomeGrid(), // Changed from FeatureGrid
+                        const SizedBox(height: 40),
+                        if (_isPremium && !_isMentor) _buildMentorApplicationCTA(),
+                        if (_isMentor) _buildMentorPortalButton(),
+                        if (!_isPremium) _buildUpgradeCTA(),
+                        const SizedBox(height: 100),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBackground() {
+    return Positioned.fill(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            center: const Alignment(0.8, -0.5),
+            radius: 1.2,
+            colors: [const Color(0xFF137FEC).withAlpha(30), const Color(0xFF0A0A0A)],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return SliverAppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Text(
+        "PREMIUM ACCESS",
+        style: GoogleFonts.inter(fontWeight: FontWeight.w900, letterSpacing: 4, fontSize: 16),
+      ),
+      actions: [
+        if (_isPremium) const Padding(padding: EdgeInsets.only(right: 20), child: Icon(Icons.stars, color: Color(0xFF137FEC))),
+      ],
+    );
+  }
+
+  Widget _buildProfileCard() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF161616),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: _isPremium ? const Color(0xFF137FEC).withAlpha(100) : Colors.white.withAlpha(10)),
+      ),
+      child: Row(
+        children: [
+          const CircleAvatar(radius: 25, backgroundColor: Color(0xFF137FEC), child: Icon(Icons.person, color: Colors.white)),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Nyasha Gabriel", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Text(_isPremium ? "ACCESS GRANTED: UNLIMITED" : "STANDARD ACCESS: DIAGNOSIS ONLY", 
+                style: TextStyle(color: _isPremium ? const Color(0xFF137FEC) : Colors.white.withAlpha(80), fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionTitle(String title) {
+    return Text(title, style: const TextStyle(color: Color(0xFF137FEC), fontWeight: FontWeight.bold, letterSpacing: 2, fontSize: 12));
+  }
+
+  Widget _buildOutcomeGrid() {
+    // Focus on OUTCOMES, not features
+    return GridView.count(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      crossAxisSpacing: 15,
+      mainAxisSpacing: 15,
+      childAspectRatio: 1.1,
+      children: [
+        _outcomeCard("Exact Code Fixes", "Copy-paste solutions for env errors", Icons.code, _isPremium),
+        _outcomeCard("Submission Checks", "Pre-grade logic to guarantee passing", Icons.verified, _isPremium),
+        _outcomeCard("Rescue Blueprints", "Step-by-step recovery plans", Icons.architecture, _isPremium),
+        _outcomeCard("Priority Rescue", "Skip the line for urgent help", Icons.timer, _isPremium),
+      ],
+    );
+  }
+
+  Widget _outcomeCard(String title, String subtitle, IconData icon, bool unlocked) {
+    return Container(
+      decoration: BoxDecoration(color: const Color(0xFF161616), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white.withAlpha(5))),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: unlocked ? const Color(0xFF137FEC) : Colors.white.withAlpha(20), size: 32),
+                const SizedBox(height: 12),
+                Text(title, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: unlocked ? Colors.white : Colors.white.withAlpha(50))),
+                const SizedBox(height: 6),
+                Text(subtitle, textAlign: TextAlign.center, style: TextStyle(fontSize: 10, color: Colors.white.withAlpha(30), height: 1.2)),
+              ],
+            ),
+          ),
+          if (!unlocked) const Positioned(top: 10, right: 10, child: Icon(Icons.lock, size: 14, color: Colors.white24)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMentorApplicationCTA() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF137FEC).withAlpha(20),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFF137FEC).withAlpha(50)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Join the Operators", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF137FEC))),
+          const SizedBox(height: 8),
+          const Text("Help X Operators don't just 'help'. They execute known fixes. Apply to join the elite rescue team.", 
+            style: TextStyle(color: Colors.white70, fontSize: 13, height: 1.5)),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _applyForMentor,
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF137FEC), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+            child: const Text("Apply as Operator", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMentorPortalButton() {
+    return ElevatedButton.icon(
+      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MentorPortal())),
+      icon: const Icon(Icons.dashboard_customize),
+      label: const Text("OPEN OPERATOR DASHBOARD"),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        minimumSize: const Size(double.infinity, 60),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      ),
+    );
+  }
+
+  Widget _buildUpgradeCTA() {
+    return Container(
+      padding: const EdgeInsets.all(30),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [const Color(0xFF137FEC), const Color(0xFF137FEC).withAlpha(150)]),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Column(
+        children: [
+          const Text("Stop Guessing.", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 10),
+          const Text("Get the exact commands, checklists, and blueprints to pass with certainty.", textAlign: TextAlign.center),
+          const SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: const Color(0xFF137FEC), minimumSize: const Size(double.infinity, 55)),
+            child: const Text("UNLOCK CERTAINTY", style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+}import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+// Global App ID for Rule 1
+const String appId = "help-x-web";
+
+class MentorPortal extends StatefulWidget {
+  const MentorPortal({super.key});
+
+  @override
+  State<MentorPortal> createState() => _MentorPortalState();
+}
+
+class _MentorPortalState extends State<MentorPortal> {
+  User? _user;
+  bool _isLoading = true;
+  Map<String, dynamic>? _mentorData;
+
+  @override
+  void initState() {
+    super.initState();
+    _initAuthAndData();
+  }
+
+  // RULE 3: Auth Before Queries
+  Future<void> _initAuthAndData() async {
+    try {
+      final auth = FirebaseAuth.instance;
+      // Ensure we are signed in
+      if (auth.currentUser == null) {
+        await auth.signInAnonymously();
+      }
+      _user = auth.currentUser;
+
+      if (_user != null) {
+        _syncMentorProfile();
+      }
+    } catch (e) {
+      debugPrint("Auth Error: $e");
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  // RULE 1: Strict Paths
+  void _syncMentorProfile() {
+    if (_user == null) return;
+
+    FirebaseFirestore.instance
+        .collection('artifacts')
+        .doc(appId)
+        .collection('users')
+        .doc(_user!.uid)
+        .collection('profile')
+        .doc('status')
+        .snapshots()
+        .listen((doc) {
+      if (doc.exists && mounted) {
+        setState(() => _mentorData = doc.data());
+      }
+    });
+  }
+
+  Future<void> _claimBooking(String bookingId) async {
+    if (_user == null) return;
+
+    try {
+      // RULE 1: Strict Paths
+      await FirebaseFirestore.instance
+          .collection('artifacts')
+          .doc(appId)
+          .collection('public')
+          .doc('data')
+          .collection('bookings')
+          .doc(bookingId)
+          .update({
+        'status': 'claimed',
+        'mentorId': _user!.uid,
+        'claimedAt': FieldValue.serverTimestamp(),
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Booking claimed successfully! Check your active list.")),
+        );
+      }
+    } catch (e) {
+      debugPrint("Claim Error: $e");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0A),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text("MENTOR PORTAL",
+            style: GoogleFonts.inter(
+                fontWeight: FontWeight.w900, letterSpacing: 2, fontSize: 16)),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.settings, size: 20)),
+        ],
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator(color: Color(0xFF137FEC)))
+          : Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildEarningsCard(),
+                  const SizedBox(height: 40),
+                  const Text("ACTIVE REQUESTS",
+                      style: TextStyle(
+                          color: Color(0xFF137FEC),
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5,
+                          fontSize: 12)),
+                  const SizedBox(height: 20),
+                  Expanded(child: _buildRequestList()),
+                ],
+              ),
+            ),
+    );
+  }
+
+  Widget _buildEarningsCard() {
+    final earnings = _mentorData?['earnings'] ?? 0.0;
+    final completed = _mentorData?['completedSessions'] ?? 0;
+    final rating = _mentorData?['rating'] ?? 5.0;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(30),
+      decoration: BoxDecoration(
+        color: const Color(0xFF161616),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.white.withAlpha(5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Pending Payout",
+              style: TextStyle(color: Colors.white54, fontSize: 14)),
+          const SizedBox(height: 8),
+          Text("\$${earnings.toStringAsFixed(2)}",
+              style: const TextStyle(
+                  fontSize: 42, fontWeight: FontWeight.w900, color: Colors.white)),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              _statMini("Completed", completed.toString()),
+              const SizedBox(width: 24),
+              _statMini("Rating", "${rating.toStringAsFixed(1)}/5"),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _statMini(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: const TextStyle(
+                color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
+        Text(value,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      ],
+    );
+  }
+
+  Widget _buildRequestList() {
+    // RULE 2: Fetch all data with simple collection queries, then filter in memory
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('artifacts')
+          .doc(appId)
+          .collection('public')
+          .doc('data')
+          .collection('bookings')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text("Error: ${snapshot.error}"));
+        }
+        if (!snapshot.hasData) {
+          return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF137FEC)));
+        }
+
+        final allDocs = snapshot.data!.docs;
+        // Filtering in memory as per Rule 2
+        final pendingBookings = allDocs.where((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          return data['status'] == 'pending';
+        }).toList();
+
+        if (pendingBookings.isEmpty) {
+          return const Center(
+              child: Text("No active help requests found.",
+                  style: TextStyle(color: Colors.white38)));
+        }
+
+        return ListView.builder(
+          itemCount: pendingBookings.length,
+          itemBuilder: (context, index) {
+            final doc = pendingBookings[index];
+            final data = doc.data() as Map<String, dynamic>;
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFF161616),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white.withAlpha(5)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.help_center_outlined, color: Color(0xFF137FEC)),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(data['course'] ?? "Unknown Course",
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                        Text(data['service'] ?? "General Support",
+                            style: const TextStyle(
+                                color: Colors.white54, fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _claimBooking(doc.id),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF137FEC).withAlpha(30),
+                      foregroundColor: const Color(0xFF137FEC),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: const Text("CLAIM",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class BookingsPage extends StatefulWidget {
+  const BookingsPage({super.key});
+
+  @override
+  State<BookingsPage> createState() => _BookingsPageState();
+}
+
+class _BookingsPageState extends State<BookingsPage> {
+  int _currentStep = 0;
+  String? _selectedService;
+  DateTime _selectedDate = DateTime.now();
+  String? _selectedTime;
+
+  final List<Map<String, dynamic>> _services = [
+    {
+      "name": "Concept Explanation",
+      "price": "\$45",
+      "duration": "45 mins",
+      "icon": Icons.school,
+    },
+    {
+      "name": "Code Review",
+      "price": "\$60",
+      "duration": "1 hour",
+      "icon": Icons.code,
+    },
+    {
+      "name": "Project Planning",
+      "price": "\$90",
+      "duration": "session",
+      "icon": Icons.rocket_launch,
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0A),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(
+          "BOOK A SESSION",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2,
+            fontSize: 16,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: Stepper(
+        type: StepperType.horizontal,
+        currentStep: _currentStep,
+        onStepContinue: () {
+          if (_currentStep < 2) setState(() => _currentStep += 1);
+        },
+        onStepCancel: () {
+          if (_currentStep > 0) setState(() => _currentStep -= 1);
+        },
+        controlsBuilder: (context, details) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 40),
+            child: Row(
+              children: [
+                if (_currentStep > 0)
+                  TextButton(
+                    onPressed: details.onStepCancel,
+                    child: const Text(
+                      "Back",
+                      style: TextStyle(color: Colors.white54),
+                    ),
+                  ),
+                const Spacer(),
+                ElevatedButton(
+                  onPressed: details.onStepContinue,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF137FEC),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 20,
+                    ),
+                  ),
+                  child: Text(
+                    _currentStep == 2 ? "Confirm Booking" : "Continue",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        steps: [
+          Step(
+            isActive: _currentStep >= 0,
+            state: _currentStep > 0 ? StepState.complete : StepState.indexed,
+            title: const Text("Service"),
+            content: _buildServiceSelection(),
+          ),
+          Step(
+            isActive: _currentStep >= 1,
+            state: _currentStep > 1 ? StepState.complete : StepState.indexed,
+            title: const Text("Schedule"),
+            content: _buildScheduler(),
+          ),
+          Step(
+            isActive: _currentStep >= 2,
+            title: const Text("Details"),
+            content: _buildDetailForm(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildServiceSelection() {
+    return Column(
+      children: _services.map((s) {
+        bool isSelected = _selectedService == s['name'];
+        return Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF161616),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: isSelected
+                  ? const Color(0xFF137FEC)
+                  : Colors.white.withAlpha(5),
+            ),
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.all(15),
+            leading: Icon(
+              s['icon'],
+              color: isSelected ? const Color(0xFF137FEC) : Colors.white24,
+            ),
+            title: Text(
+              s['name'],
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              "${s['duration']} • ${s['price']}",
+              style: const TextStyle(color: Colors.white54),
+            ),
+            trailing: isSelected
+                ? const Icon(Icons.check_circle, color: Color(0xFF137FEC))
+                : null,
+            onTap: () => setState(() => _selectedService = s['name']),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildScheduler() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Select Date",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        const SizedBox(height: 20),
+        CalendarDatePicker(
+          initialDate: _selectedDate,
+          firstDate: DateTime.now(),
+          lastDate: DateTime.now().add(const Duration(days: 30)),
+          onDateChanged: (d) => setState(() => _selectedDate = d),
+        ),
+        const SizedBox(height: 30),
+        const Text(
+          "Available Slots",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        const SizedBox(height: 15),
+        Wrap(
+          spacing: 10,
+          children: ["09:00 AM", "10:30 AM", "01:00 PM", "02:30 PM", "04:00 PM"]
+              .map((t) {
+                bool isSelected = _selectedTime == t;
+                return ChoiceChip(
+                  label: Text(t),
+                  selected: isSelected,
+                  onSelected: (val) => setState(() => _selectedTime = t),
+                  selectedColor: const Color(0xFF137FEC),
+                  backgroundColor: const Color(0xFF161616),
+                  labelStyle: TextStyle(
+                    color: isSelected ? Colors.white : Colors.white54,
+                  ),
+                );
+              })
+              .toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailForm() {
+    return Column(
+      children: [
+        _inputField("Full Name", Icons.person, "Jane Doe"),
+        const SizedBox(height: 15),
+        _inputField("Student Email", Icons.email, "jane@university.edu"),
+        const SizedBox(height: 15),
+        _inputField(
+          "Topic / Notes",
+          Icons.description,
+          "What do you need help with?",
+          maxLines: 4,
+        ),
+      ],
+    );
+  }
+
+  Widget _inputField(
+    String label,
+    IconData icon,
+    String hint, {
+    int maxLines = 1,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            color: Colors.white54,
+            letterSpacing: 1,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            hintText: hint,
+            prefixIcon: Icon(icon, size: 18, color: const Color(0xFF137FEC)),
+            filled: true,
+            fillColor: const Color(0xFF161616),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class LibraryPage extends StatelessWidget {
+  const LibraryPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0A),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(
+          "MASTER LIBRARY",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2,
+            fontSize: 16,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(children: [_buildSearchHeader(), _buildGrid()]),
+      ),
+    );
+  }
+
+  Widget _buildSearchHeader() {
+    return Container(
+      padding: const EdgeInsets.all(40),
+      child: Column(
+        children: [
+          Text(
+            "1000+ Premium Digital Products",
+            style: GoogleFonts.inter(
+              fontSize: 32,
+              fontWeight: FontWeight.w900,
+              letterSpacing: -1,
+            ),
+          ),
+          const SizedBox(height: 24),
+          TextField(
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search, color: Color(0xFF137FEC)),
+              hintText: "Search for guide titles, course codes...",
+              filled: true,
+              fillColor: const Color(0xFF161616),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGrid() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+      child: Wrap(
+        spacing: 20,
+        runSpacing: 20,
+        alignment: WrapAlignment.center,
+        children: List.generate(8, (index) => _productItem(index)),
+      ),
+    );
+  }
+
+  Widget _productItem(int index) {
+    return Container(
+      width: 200,
+      decoration: BoxDecoration(
+        color: const Color(0xFF161616),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.white.withAlpha(5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 140,
+            decoration: BoxDecoration(
+              color: Colors.white.withAlpha(5),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(15),
+              ),
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.picture_as_pdf,
+                color: Colors.white10,
+                size: 40,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Study Guide #$index",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "\$12.00",
+                      style: TextStyle(fontWeight: FontWeight.w900),
+                    ),
+                    Icon(
+                      Icons.shopping_bag_outlined,
+                      size: 16,
+                      color: Colors.white.withAlpha(50),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

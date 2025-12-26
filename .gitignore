@@ -1,0 +1,44 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+
+# IntelliJ / VS Code
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+coverage/
+
+# Android/iOS generated files
+android/
+ios/
+linux/
+macos/
+windows/
+# (Only exclude platform folders if you are strictly doing Web. 
+# If you plan to build for Android later, keep 'android/' but ignore 'android/app/build')
+
+# --- PREVENT MODULES & KEYS FROM UPLOADING ---
+node_modules/
+firebase-debug.log
+firebaserc
+firebase.json
+.env
+functions/node_modules/

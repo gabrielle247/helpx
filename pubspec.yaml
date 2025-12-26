@@ -1,0 +1,50 @@
+name: help_x_web
+description: "Help X is a secure web application that connects people who need help with those who can provide it. Managed by Greyway.Co."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI & Icons
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.3.3
+  font_awesome_flutter: ^10.12.0
+
+  # Firebase / Backend
+  firebase_core: ^4.3.0
+  cloud_firestore: ^6.1.1
+  firebase_auth: ^6.1.3
+
+  # Utilities
+  url_launcher: ^6.3.2
+
+  # --- PAYMENTS ---
+  # Credit Cards (Stripe is best for Web)
+  flutter_stripe: ^10.1.1
+  flutter_stripe_web: ^5.1.0 # Required for web support
+
+  # PayPal
+  flutter_paypal: ^0.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/exam_guides_bundle.png
+    - assets/calculus.jpg
+    - assets/clarity.jpg
+    - assets/data_types.jpg
+    - assets/help.jpg
+    - assets/python.png
+    - assets/tech_rescue.jpg
